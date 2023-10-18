@@ -29,8 +29,7 @@ class Menu:
         with open(filename, 'r') as file:
             menu_data = json.load(file)
             for item in menu_data:
-                self.add_item(item['name'], item['price'])
-
+                self.add_item(item, float(menu_data[item]))
 
 class Card:
     def __init__(self, card_number):
@@ -60,8 +59,7 @@ class Order:
         total = 0
         for item, quantity in self.items:
             menu_item = menu.get_item(item)
-            if menu_item:
-                total += menu_item.price * quantity
+            total += menu_item.price * quantity
         self.order_total = total
 
 
@@ -122,6 +120,7 @@ class ShowMenu:
         client_card.activate_card()
         client = Client(name, phone, client_card)
         self.clients.append(client)
+        self.active_client = client
         print(f"Client {name} registered.")
 
     def make_order(self):
@@ -151,13 +150,13 @@ class ShowMenu:
         client_name = self.active_client.name
         print(f"Finishing the order for {client_name}")
         active_order = self.active_client.orders[-1]
-        active_order.calculate_total(self.menu)
+        active_order.calculate_total(menu)
         print(f"Total cost of the order: ${active_order.order_total}")
         self.active_client.finished_order(active_order)
 
     def show_menu(self):
         print("Menu:")
-        for item in self.menu.items:
+        for item in menu.items:
             print(f"{item.name}: ${item.price}")
 
     def start(self):
