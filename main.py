@@ -124,7 +124,10 @@ class ShowMenu:
         self.active_client = client
         print(f"Client {name} registered.")
 # need to make option to change active client from clients list
-# def get_active_client()
+# think there's a conflict between the card_number and the ordering_card. Need to connect those with client and be able to retrieve them
+    def get_active_client(self):
+        return print(f"{self.client_card}")
+        # choose_Client = input("Choose client card to pay")
 
     def make_order(self):
         if not self.active_client:
