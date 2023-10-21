@@ -25,6 +25,7 @@ class Menu:
                 return item
         return None
 
+# load json file and add to menu
     def load_from_json(self, filename):
         with open(filename, 'r') as file:
             menu_data = json.load(file)
@@ -122,15 +123,20 @@ class ShowMenu:
         self.clients.append(client)
         self.active_client = client
         print(f"Client {name} registered.")
+# need to make option to change active client from clients list
+# def get_active_client()
 
     def make_order(self):
         if not self.active_client:
             print("No active client. Please register a client first.")
             return
 
+# get_active_client()
+# choose from clients list
         client_name = self.active_client.name
         print(f"Making an order for {client_name}")
 
+# maybe change how to input order? index based vs name based error check?
         order = Order()
         while True:
             item = input("Enter item name (or 0 to finish): ")
@@ -141,14 +147,17 @@ class ShowMenu:
             order.add_item(item, quantity)
 
         self.active_client.make_order(order)
+# need to add order to specific client
 
     def finish_order(self):
         if not self.active_client:
             print("No active client. Please register a client first.")
             return
-
+# get_active_client()
+# need to clear order from order card, orders list, clients list
         client_name = self.active_client.name
         print(f"Finishing the order for {client_name}")
+        # get_client_order() method to search through clients orders list for matching client
         active_order = self.active_client.orders[-1]
         active_order.calculate_total(menu)
         print(f"Total cost of the order: ${active_order.order_total}")
