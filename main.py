@@ -123,11 +123,17 @@ class ShowMenu:
         self.clients.append(client)
         self.active_client = client
         print(f"Client {name} registered.")
+
 # need to make option to change active client from clients list
 # think there's a conflict between the card_number and the ordering_card. Need to connect those with client and be able to retrieve them
     def get_active_client(self):
-        return print(f"{self.client_card}")
-        # choose_Client = input("Choose client card to pay")
+        card_number = input("Enter the card number: ")
+        for client in self.clients:
+            if client.ordering_card.card_number == card_number:
+                self.active_client = client
+                print(f"Active client set to {client.name}.")
+                return
+        print("Client not found for the provided card number.")
 
     def make_order(self):
         if not self.active_client:
@@ -136,10 +142,12 @@ class ShowMenu:
 
 # get_active_client()
 # choose from clients list
+        client_name = self.get_active_client()
         client_name = self.active_client.name
         print(f"Making an order for {client_name}")
 
 # maybe change how to input order? index based vs name based error check?
+        print(self.show_menu())
         order = Order()
         while True:
             item = input("Enter item name (or 0 to finish): ")
@@ -158,13 +166,25 @@ class ShowMenu:
             return
 # get_active_client()
 # need to clear order from order card, orders list, clients list
+        client_name = self.get_active_client()
         client_name = self.active_client.name
         print(f"Finishing the order for {client_name}")
-        # get_client_order() method to search through clients orders list for matching client
         active_order = self.active_client.orders[-1]
-        active_order.calculate_total(menu)
+        active_order.calculate_total(self.menu)
         print(f"Total cost of the order: ${active_order.order_total}")
-        self.active_client.finished_order(active_order)
+
+        # Remove the order from the ordering card
+        self.active_client.ordering_card.items_consumed.remove(active_order)
+
+        # Remove the order from the client's orders list
+        self.active_client.orders.remove(active_order)
+
+        # Deactivate the ordering card
+        self.active_client.ordering_card.deactivate_card()
+        self.active_client = None
+
+        print(
+            f"Order finished for {client_name}. The ordering card has been deactivated.")
 
     def show_menu(self):
         print("Menu:")
