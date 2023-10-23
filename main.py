@@ -82,7 +82,6 @@ class Client:
 
 class ShowMenu:
     def __init__(self):
-        self.menu = Menu()
         self.clients = []
         self.active_client = None
 
@@ -170,7 +169,7 @@ class ShowMenu:
         client_name = self.active_client.name
         print(f"Finishing the order for {client_name}")
         active_order = self.active_client.orders[-1]
-        active_order.calculate_total(self.menu)
+        active_order.calculate_total(menu)
         print(f"Total cost of the order: ${active_order.order_total}")
 
         # Remove the order from the ordering card
